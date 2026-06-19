@@ -578,6 +578,7 @@
     async function loadPosts() {
       try {
         const res = await fetch('/api/posts');
+        if (!res.ok) throw new Error('no api');
         posts = await res.json();
       } catch(e) {
         posts = JSON.parse(localStorage.getItem(STORAGE_KEY) || '[]');
@@ -587,6 +588,7 @@
     }
 
     async function savePosts() {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
       try {
         await fetch('/api/posts', {
           method: 'PUT',
@@ -597,7 +599,7 @@
           body: JSON.stringify({ posts })
         });
       } catch(e) {
-        localStorage.setItem(STORAGE_KEY, JSON.stringify(posts));
+        // localStorage sudah tersave di atas
       }
     }
 
